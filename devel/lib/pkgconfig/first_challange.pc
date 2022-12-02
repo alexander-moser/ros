@@ -1,0 +1,8 @@
+prefix=/home/alexander/catkin_ws/devel
+
+Name: first_challange
+Description: Description of first_challange
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
