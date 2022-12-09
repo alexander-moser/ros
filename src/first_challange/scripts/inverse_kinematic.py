@@ -1,8 +1,6 @@
 #! /usr/bin/env python3
-
 import math
 import numpy as np
-import math
 
 def kuka_IK(point, R, joint_positions):
     cos = math.cos
@@ -14,17 +12,16 @@ def kuka_IK(point, R, joint_positions):
     q = joint_positions #it must contain 7 elements
 
     # initialize robot links
-    k = 0.311
-    l = 0.4
-    m = 0.39
-    n = 0.078
+    k = 0.3330
+    l = 0.3160
+    m = 0.3840
+    n = 0.1070
 
     # manipulate tolerance
-    tolerance = 5
+    tolerance = 1
 
     # set initial error to a big value
     error_end = 100
-
 
     # repeat until error <= tolerance
     while error_end > tolerance:
