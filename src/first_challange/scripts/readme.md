@@ -25,6 +25,7 @@ Copy the folder into `catkin_ws/src`
 cd ~/catkin_ws
 catkin_make
 ```
+then run
 
 ```
 roslaunch first_challange first_assignment.launch

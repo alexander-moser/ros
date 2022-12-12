@@ -5,6 +5,7 @@ import numpy as np
 def kuka_IK(point, R, joint_positions):
     cos = math.cos
     sin = math.sin
+    pi = math.pi
 
     x = point[0]
     y = point[1]
@@ -18,10 +19,18 @@ def kuka_IK(point, R, joint_positions):
     n = 0.1070
 
     # manipulate tolerance
-    tolerance = 1
+    tolerance = 0.001
 
     # set initial error to a big value
     error_end = 100
+
+    #dh-parameter
+    d = [0.3330, 0.0000, 0.3160, 0.0000, 0.3840, 0.0000, 0.1070]
+    theta = [q[0]+pi, q[1]-pi, q[2], q[3]+pi, q[4]-pi, q[5], q[6]]
+    a = [0.0000, 0.0000, 0.0825, 0.0825, 0.0000, 0.0880, 0.0000]
+    alpha = [pi/2, pi/2, pi/2, pi/2, pi/2, pi/2, 0]
+
+    q = theta
 
     # repeat until error <= tolerance
     while error_end > tolerance:
@@ -29,7 +38,7 @@ def kuka_IK(point, R, joint_positions):
         t10 = [
             [cos(q[0]), 0, sin(q[0]), 0],
             [sin(q[0]), 0, -cos(q[0]), 0],
-            [0, 1, 0, 0],
+            [0, 1, 0, d[0]],
             [0, 0, 0, 1]
         ]
         t21 = [
@@ -39,33 +48,33 @@ def kuka_IK(point, R, joint_positions):
             [0, 0, 0, 1]
         ]
         t32 = [
-            [cos(q[2]), 0, -sin(q[2]), 0],
-            [sin(q[2]), 0, cos(q[2]), 0],
-            [0, -1, 0, l],
+            [cos(q[2]), 0, sin(q[2]), a[2]*cos(q[2])],
+            [sin(q[2]), 0, -cos(q[2]), a[2]*sin(q[2])],
+            [0, 1, 0, d[2]],
             [0, 0, 0, 1]
         ]
         t43 = [
-            [cos(q[3]), 0, sin(q[3]), 0],
-            [sin(q[3]), 0, -cos(q[3]), 0],
-            [0, 1, 0, 0],
+            [cos(q[3]), 0, -sin(q[3]), a[3]*cos(q[3])],
+            [sin(q[3]), 0, cos(q[3]), a[3]*sin(q[3])],
+            [0, -1, 0, 0],
             [0, 0, 0, 1]
         ]
         t54 = [
             [cos(q[4]), 0, sin(q[4]), 0],
             [sin(q[4]), 0, -cos(q[4]), 0],
-            [0, 1, 0, m],
+            [0, 1, 0, d[4]],
             [0, 0, 0, 1]
         ]
         t65 = [
-            [cos(q[5]), 0, -sin(q[5]), 0],
-            [sin(q[5]), 0, cos(q[5]), 0],
+            [cos(q[5]), 0, sin(q[5]), a[5]*cos(q[5])],
+            [sin(q[5]), 0, -cos(q[5]), a[5]*sin(q[5])],
             [0, -1, 0, 0],
             [0, 0, 0, 1]
         ]
         t76 = [
             [cos(q[6]), -sin(q[6]), 0, 0],
             [sin(q[6]), cos(q[6]), 0, 0],
-            [0, 0, 1, 0],
+            [0, 0, 1, d[6]],
             [0, 0, 0, 1]
         ]
 
@@ -77,13 +86,13 @@ def kuka_IK(point, R, joint_positions):
         t70 = np.dot(t60, t76)
 
         # forward kinamatics
-        pos7 = [0, 0, n, 1]
+        pos7 = [0, 0, 0, 1]
         pos0 = np.dot(t70, pos7)
 
         # calculate end difference
         diff_x = pos0[0] - x
         diff_y = pos0[1] - y
-        diff_z = pos0[2] + k - z
+        diff_z = pos0[2] - z
 
         diff_pos = [diff_x, diff_y, diff_z]
 
@@ -142,4 +151,20 @@ def kuka_IK(point, R, joint_positions):
         # update config
         q = q - diff_config
 
+        #print(q)
+
     return q
+
+# joint1 = -3.123283e-05
+# joint2 = -9.512901e-05
+# joint3 = -7.152557e-07
+# joint4 = -1.5708812475
+# joint5 = -0.0002501010
+# joint6 = 1.56948256492
+# joint7 = -3.004074e-05
+
+# point = [-0.07, 0, 0.413]
+
+# joints = [joint1, joint2, joint3, joint4, joint5, joint6, joint7]
+
+# kuka_IK(point, 1, joints)
