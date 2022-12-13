@@ -2,8 +2,8 @@
 import time
 import math
 import rospy
-import inverse_kinematic
 import ik
+from controller import Controller
 from std_msgs.msg import Float32
 
 def main():
@@ -13,18 +13,12 @@ def main():
 
     #init node
     rospy.init_node('franka_node')
+
+    ros_controller = Controller()
     global current_q
     rate = rospy.Rate(10)
     
-    #define the ros topic where to publish the joints values
-    publisher1 = rospy.Publisher('Franka/joint1/cmd_vel', Float32, queue_size=10)
-    publisher2 = rospy.Publisher('Franka/joint2/cmd_vel', Float32, queue_size=10)
-    publisher3 = rospy.Publisher('Franka/joint3/cmd_vel', Float32, queue_size=10)
-    publisher4 = rospy.Publisher('Franka/joint4/cmd_vel', Float32, queue_size=10)
-    publisher5 = rospy.Publisher('Franka/joint5/cmd_vel', Float32, queue_size=10)
-    publisher6 = rospy.Publisher('Franka/joint6/cmd_vel', Float32, queue_size=10)
-    publisher7 = rospy.Publisher('Franka/joint7/cmd_vel', Float32, queue_size=10)
-
+    #define the ros topic where to publish the joints value
 
     # Start joint state
     joint1 = (0)
@@ -42,25 +36,15 @@ def main():
 
         time.sleep(3)
 
-        # Sets the robot to all zeros
-        publisher1.publish(0)
-        publisher2.publish(0)
-        publisher3.publish(0)
-        publisher4.publish(0)
-        publisher5.publish(0)
-        publisher6.publish(0)
-        publisher7.publish(0)
 
-        time.sleep(3)
+        all_zeros = [0, 0, 0, 0, 0, 0, 0]
+        start = [0, 0, 0, -math.pi/2, 0, -math.pi/2, 0]
+
+        # Sets the robot to all zeros
+        ros_controller.moveToPosition(all_zeros)
 
         # Sets the robot to starting position
-        publisher1.publish(0)
-        publisher2.publish(0)
-        publisher3.publish(0)
-        publisher4.publish(-math.pi/2)
-        publisher5.publish(0)
-        publisher6.publish(math.pi/2)
-        publisher7.publish(0)
+        ros_controller.moveToPosition(start)
 
         time.sleep(3)
 
@@ -68,19 +52,13 @@ def main():
         point = [0.413, 0, -0.07, 1, 1, 1]
 
         #q = inverse_kinematic.kuka_IK(point, current_q)
-        q = ik.calculate_inverse_kinematics(0.1)
+        q = ik.calculate_inverse_kinematics(0.01)
 
         # set the current q to the old q
         current_q = q
 
         #Publish the results
-        publisher1.publish(q[0])
-        publisher2.publish(q[1])
-        publisher3.publish(q[2])
-        publisher4.publish(q[3])
-        publisher5.publish(q[4])
-        publisher6.publish(q[5])
-        publisher7.publish(q[6])
+        ros_controller.moveToPosition(q)
 
         break
 
