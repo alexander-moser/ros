@@ -2,7 +2,11 @@
 import math
 import numpy as np
 
-def kuka_IK(point, R, joint_positions):
+def kuka_IK(point, joint_positions):
+    '''
+    This function is used to calculate the inverse kinematic of a given point
+    '''
+
     cos = math.cos
     sin = math.sin
     pi = math.pi
@@ -10,13 +14,9 @@ def kuka_IK(point, R, joint_positions):
     x = point[0]
     y = point[1]
     z = point[2]
-    q = joint_positions #it must contain 7 elements
+    q = joint_positions
 
-    # initialize robot links
-    k = 0.3330
-    l = 0.3160
-    m = 0.3840
-    n = 0.1070
+    R = [[point[3], 0, 0], [0, point[4], 0], [0, 0, point[5]]]
 
     # manipulate tolerance
     tolerance = 0.001
