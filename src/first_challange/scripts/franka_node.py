@@ -68,7 +68,7 @@ def main():
         point = [0.413, 0, -0.07, 1, 1, 1]
 
         #q = inverse_kinematic.kuka_IK(point, current_q)
-        q = ik.ik(0.1)
+        q = ik.calculate_inverse_kinematics(0.1)
 
         # set the current q to the old q
         current_q = q

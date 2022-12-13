@@ -16,7 +16,7 @@ def calc_a(num):
         mat = np.array([
             [cos(theta_val), 0, sin(theta_val), 0],
             [sin(theta_val), 0, -cos(theta_val), 0],
-            [0, 1, 0, 0],
+            [0, 1, 0, d[0]],
             [0, 0, 0, 1]
         ])
     elif num == 1:
@@ -28,16 +28,16 @@ def calc_a(num):
         ])
     elif num == 2:
         mat = np.array([
-            [cos(theta_val), 0, -sin(theta_val), 0],
-            [sin(theta_val), 0, cos(theta_val), 0],
+            [cos(theta_val), 0, -sin(theta_val), a[2] * cos(theta_val)],
+            [sin(theta_val), 0, cos(theta_val), a[2] * sin(theta_val)],
             [0, -1, 0, d[2]],
             [0, 0, 0, 1]
         ])
     elif num == 3:
         mat = np.array([
-            [cos(theta_val), 0, sin(theta_val), 0],
-            [sin(theta_val), 0, -cos(theta_val), 0],
-            [0, 1, 0, 0],
+            [cos(theta_val), 0, -sin(theta_val), a[3] * cos(theta_val)],
+            [sin(theta_val), 0, cos(theta_val), a[3] * cos(theta_val)],
+            [0, -1, 0, 0],
             [0, 0, 0, 1]
         ])
     elif num == 4:
@@ -49,26 +49,28 @@ def calc_a(num):
         ])
     elif num == 5:
         mat = np.array([
-            [cos(theta_val), 0, -sin(theta_val), 0],
-            [sin(theta_val), 0, cos(theta_val), 0],
-            [0, -1, 0, 0],
+            [cos(theta_val), 0, sin(theta_val), a[5] * cos(theta_val)],
+            [sin(theta_val), 0, -cos(theta_val), a[5] * cos(theta_val)],
+            [0, 1, 0, 0],
             [0, 0, 0, 1]
         ])
     elif num == 6:
         mat = np.array([
             [cos(theta_val), -sin(theta_val), 0, 0],
             [sin(theta_val), cos(theta_val), 0, 0],
-            [0, 0, 1, 0],
+            [0, 0, 1, d[6]],
             [0, 0, 0, 1]
         ])
 
     return mat
 
 point = [0, 0, 0.413, 0, 0, 0]
-#point = [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
 
+def calculate_inverse_kinematics(learning_rate):
+    '''
+    This function is used to calculate the inverse kinematics
+    '''
 
-def ik(learning_rate):
     tolerance = 2.5   
     error = 100
                                     
