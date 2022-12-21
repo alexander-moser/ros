@@ -39,5 +39,16 @@ then run
 roslaunch first_challange first_assignment.launch
 ```
 
+To set a new target position post
 
+```
+rostopic pub /goal geometry_msgs/Twist "linear:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    angular:
+    x: 0.0
+    y: 0.0
+    z: 0.0" --once
+```
 
