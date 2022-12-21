@@ -1,0 +1,9 @@
+<launch>
+	<arg name="robot_name" default="franka"/>
+	<arg name="gui" default="False" />
+	<arg name="remap_name" default="controller/joint_states"/>
+
+	<node name="franka_node" pkg="first_challange" type="franka_node.py" output="screen">
+		<rosparam param="topic_name" subst_value="True">"$(arg remap_name)"</rosparam>
+	</node>
+</launch>
